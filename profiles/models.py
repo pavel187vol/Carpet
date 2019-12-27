@@ -20,7 +20,7 @@ class AbstractProfile(models.Model):
         abstract = True
 
     def __str__(self):
-        return "{}. {}".format(self.first_name,
+        return "{} {}".format(self.first_name,
                                self.last_name)
 
 class Customer(AbstractProfile):
@@ -43,11 +43,16 @@ class Executer(AbstractProfile):
                              null=True)
 
 class Order(models.Model):
-    description_order = models.ForeignKey('DescriptionOrder',
-                                          related_name='orders',
-                                          on_delete=models.SET_NULL,
-                                          blank=True,
-                                          null=True)
+    title = models.CharField(max_length=250)
+    text = models.TextField()
+    image = models.ImageField(upload_to='orders/%Y/%m/%d',
+                              blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    type_work = models.ForeignKey('TypeWork',
+                                  related_name='descriptionss',
+                                  on_delete=models.SET_NULL,
+                                  blank=True,
+                                  null=True)
     customer = models.ForeignKey('Customer',
                                  related_name='customers',
                                  on_delete=models.CASCADE)
@@ -60,22 +65,14 @@ class Order(models.Model):
     condition_success = models.BooleanField(default=False)
     moderation = models.BooleanField(default=False)
 
-class DescriptionOrder(models.Model):
-    text = models.TextField()
-    image = models.ImageField(upload_to='orders/%Y/%m/%d',
-                              blank=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    type_work = models.ForeignKey('TypeWork',
-                                  related_name='descriptionss',
-                                  on_delete=models.SET_NULL,
-                                  blank=True,
-                                  null=True)
-    order = models.ForeignKey('Order',
-                              related_name='orders',
-                              on_delete=models.CASCADE)
+    def __str__(self):
+        return self.title
 
 class TypeWork(models.Model):
     title = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.title
 
 class FeedBack(models.Model):
     body = models.TextField()
