@@ -45,7 +45,9 @@ class Executer(AbstractProfile):
 class Order(models.Model):
     description_order = models.ForeignKey('DescriptionOrder',
                                           related_name='orders',
-                                          on_delete=models.CASCADE)
+                                          on_delete=models.SET_NULL,
+                                          blank=True,
+                                          null=True)
     customer = models.ForeignKey('Customer',
                                  related_name='customers',
                                  on_delete=models.CASCADE)
@@ -55,6 +57,8 @@ class Order(models.Model):
                                  blank=True,
                                  null=True)
     condition = models.BooleanField(default=False)
+    condition_success = models.BooleanField(default=False)
+    moderation = models.BooleanField(default=False)
 
 class DescriptionOrder(models.Model):
     text = models.TextField()
