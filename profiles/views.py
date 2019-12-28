@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Order, Customer
+from .models import Order, Customer, ResponseOrder
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, DeleteView
 from django.views.generic.detail import DetailView
@@ -11,10 +11,16 @@ class OrderListView(ListView):
     context_object_name = 'orders'
     template_name = 'orders/manage/order/order_list.html'
 
+
 class OrderDetailView(DetailView):
     model = Order
     context_object_name = 'order'
     template_name = 'orders/manage/order/order_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(OrderDetailView, self).get_context_data(**kwargs)
+        context['responses'] = ResponseOrder.objects.filter(order=self.object)
+        return context
 
 class OrderCreateView(CreateView):
     model = Order

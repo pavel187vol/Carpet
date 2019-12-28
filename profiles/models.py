@@ -41,6 +41,8 @@ class Executer(AbstractProfile):
                              on_delete=models.SET_NULL,
                              blank=True,
                              null=True)
+    orders_response = models.ManyToManyField('ResponseOrder',
+                                              related_name='executers')
 
 class Order(models.Model):
     title = models.CharField(max_length=250)
@@ -54,19 +56,27 @@ class Order(models.Model):
                                   blank=True,
                                   null=True)
     customer = models.ForeignKey('Customer',
-                                 related_name='customers',
+                                 related_name='orders',
                                  on_delete=models.CASCADE)
     executor = models.ForeignKey('Executer',
-                                 related_name='executors',
+                                 related_name='orders',
                                  on_delete=models.SET_NULL,
                                  blank=True,
                                  null=True)
     condition = models.BooleanField(default=False)
     condition_success = models.BooleanField(default=False)
     moderation = models.BooleanField(default=False)
+    response_orders = models.ManyToManyField('ResponseOrder',
+                                              related_name='orders',
+                                              blank=True)
 
     def __str__(self):
         return self.title
+
+    def approved(self):
+        self.condition = True
+        self.save()
+
 
 class TypeWork(models.Model):
     title = models.CharField(max_length=200)
@@ -82,3 +92,20 @@ class FeedBack(models.Model):
 
 class DescriptionExecuter(models.Model):
     pass
+
+
+class ResponseOrder(models.Model):
+    title = models.CharField(max_length=250)
+    order = models.ForeignKey('Order',
+                              related_name='responses_orders',
+                              on_delete=models.CASCADE)
+    executer = models.ForeignKey('Executer',
+                                 related_name='responses_orders',
+                                 on_delete=models.SET_NULL,
+                                 blank=True,
+                                 null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    condition = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title

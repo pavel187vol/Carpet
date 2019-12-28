@@ -6,7 +6,13 @@
   </head>
   <body>
     {{ order.customer }}
+    <br>
     {{ order }}
+    <br>
     <a href="{% url 'profile:order_delete' pk=order.id%}">Delete</a>
+    <hr>
+    {% for response in responses %}
+    {{response}}
+    {% endfor %}
   </body>
 </html>

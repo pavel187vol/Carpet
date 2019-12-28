@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Customer, Executer,\
-                    Order, TypeWork
+                    Order, TypeWork, ResponseOrder
 
 @admin.register(Customer)
 class CumstomerAdmin(admin.ModelAdmin):
@@ -28,3 +28,8 @@ class OrderAdmin(admin.ModelAdmin):
 class TypeWorkAdmin(admin.ModelAdmin):
     list_display = ['title']
     search_fields = ['title']
+
+@admin.register(ResponseOrder)
+class ResponseOrderAdmin(admin.ModelAdmin):
+    list_display = ['title', 'order', 'executer']
+    search_fields = ['title', 'order', 'executer']
