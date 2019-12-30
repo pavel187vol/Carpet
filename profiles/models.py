@@ -73,8 +73,10 @@ class Order(models.Model):
     def __str__(self):
         return self.title
 
-    def approved(self):
-        self.condition = True
+    def approv(self, exe):
+        print(exe)
+        exe = Executer.objects.get(user=exe)
+        self.executor = exe
         self.save()
 
 
@@ -109,3 +111,7 @@ class ResponseOrder(models.Model):
 
     def __str__(self):
         return self.title
+
+    def approved(self, exe):
+        exe = self.executer
+        self.order.approv(exe.user)

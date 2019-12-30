@@ -22,6 +22,8 @@ class OrderDetailView(DetailView):
         context['responses'] = ResponseOrder.objects.filter(order=self.object)
         return context
 
+
+
 class OrderCreateView(CreateView):
     model = Order
     fields = ['title', 'text', 'image', 'price',
