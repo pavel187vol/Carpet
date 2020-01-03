@@ -13,6 +13,11 @@
     <hr>
     {% for response in responses %}
     {{response}}
+    {{response.executer}}
+    <form method="post">{% csrf_token %}
+      <input type="hidden" name="executer" value="{{response.executer}}">
+      <input type="submit" value="Approved">
+    </form>
     {% endfor %}
   </body>
 </html>

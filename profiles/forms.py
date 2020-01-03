@@ -1,5 +1,5 @@
 from django import forms
-from .models import Customer, Executer
+from .models import Customer, Executer, ResponseOrder
 from django.contrib.auth.models import User
 
 
@@ -18,3 +18,8 @@ class ExecuterProfileInfoForm(forms.ModelForm):
      class Meta():
          model = Executer
          fields = ('first_name', 'last_name', 'email', 'phone')
+
+class ResponseForm(forms.ModelForm):
+    class Meta:
+        model = ResponseOrder
+        fields = ('executer',)

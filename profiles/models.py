@@ -77,6 +77,7 @@ class Order(models.Model):
         print(exe)
         exe = Executer.objects.get(user=exe)
         self.executor = exe
+        condition = True
         self.save()
 
 

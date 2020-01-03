@@ -3,7 +3,8 @@ from .models import Order, Customer, ResponseOrder
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, DeleteView
 from django.views.generic.detail import DetailView
-from .forms import CustomerProfileInfoForm, ExecuterProfileInfoForm, UserForm
+from .forms import CustomerProfileInfoForm, ExecuterProfileInfoForm, UserForm, \
+                   ResponseForm
 from django.views.generic.base import TemplateResponseMixin, View
 
 class OrderListView(ListView):
@@ -16,12 +17,13 @@ class OrderDetailView(DetailView):
     model = Order
     context_object_name = 'order'
     template_name = 'orders/manage/order/order_detail.html'
+    form = ResponseForm
 
     def get_context_data(self, **kwargs):
         context = super(OrderDetailView, self).get_context_data(**kwargs)
         context['responses'] = ResponseOrder.objects.filter(order=self.object)
+        context['form'] = ResponseForm()
         return context
-
 
 
 class OrderCreateView(CreateView):
@@ -36,13 +38,11 @@ class OrderCreateView(CreateView):
         form.instance.customer = Customer.objects.get(user=self.request.user)
         return super().form_valid(form)
 
+
 class OrderDeleteView(DeleteView):
     model = Order
     success_url = '/'
     template_name = 'orders/manage/order/order_delete.html'
-
-    # form_profile = CustomerProfileInfoForm()
-
 
 
 class UserProfileCreateMixin(TemplateResponseMixin, View):
